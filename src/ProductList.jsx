@@ -1,7 +1,8 @@
 import React, { useState,useEffect } from 'react';
+import {addItem} from './CreatSlice';
 import './ProductList.css'
 function ProductList() {
-  
+    const [addedToCart, setAddedToCart ] = useState({});
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -209,6 +210,13 @@ function ProductList() {
             ]
         }
     ];
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant))
+        setAddedToCart((prevState) => ({
+            ...prevState,
+            [plant.name]: true,
+        }));
+    }
    const styleObj={
     backgroundColor: '#4CAF50',
     color: '#fff!important',
@@ -229,6 +237,24 @@ function ProductList() {
     fontSize: '30px',
     textDecoration: 'none',
    }
+   const PlantGrid = () => {
+    const plantElements = [];
+
+    plantsArray.forEach(category => {
+        category.plants.forEach(plant => {
+            plantElements.push(
+                <div key={plant.name} className="product-card">
+                    <h2 className='product-title'>{plant.name}</h2>
+                    <img className='product-image' src={plant.image} alt={plant.name} />
+                    <p>{plant.description}</p>
+                    <p className='product-price'>{plant.cost}</p>
+                    <button  onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                </div>
+            );
+        });
+    });
+    return plantElements;
+    }
     return (
         <div>
              <div className="navbar" style={styleObj}>
@@ -251,8 +277,9 @@ function ProductList() {
         </div>
 
         <div className="product-grid">
-
-
+            <div className='product-list'>
+               {PlantGrid()} 
+            </div>
         </div>
 
     </div>
