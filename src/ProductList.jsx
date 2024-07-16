@@ -1,8 +1,10 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {addItem} from './CreatSlice';
 import './ProductList.css'
 function ProductList() {
     const [addedToCart, setAddedToCart ] = useState({});
+    const dispatch = useDispatch();
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -217,6 +219,27 @@ function ProductList() {
             [plant.name]: true,
         }));
     }
+
+    const PlantGrid = () => {
+        const plantElements = [];
+        plantsArray.forEach(category => {
+            category.plants.forEach(plant => {
+                plantElements.push(
+                    <div key={plant.name} className="product-card">
+                        <h2 className='product-title'>{plant.name}</h2>
+                        <img className='product-image' src={plant.image} alt={plant.name} />
+                        <p>{plant.description}</p>
+                        <p className='product-price'>{plant.cost}</p>
+                        <button  onClick={() => handleAddToCart(plant)}>
+                             {addedToCart[plant.name] ? 'Added' : 'Add to Cart'}
+                        </button>
+                    </div>
+                );
+            });
+    });
+    return plantElements;
+    }
+
    const styleObj={
     backgroundColor: '#4CAF50',
     color: '#fff!important',
@@ -237,24 +260,7 @@ function ProductList() {
     fontSize: '30px',
     textDecoration: 'none',
    }
-   const PlantGrid = () => {
-    const plantElements = [];
-
-    plantsArray.forEach(category => {
-        category.plants.forEach(plant => {
-            plantElements.push(
-                <div key={plant.name} className="product-card">
-                    <h2 className='product-title'>{plant.name}</h2>
-                    <img className='product-image' src={plant.image} alt={plant.name} />
-                    <p>{plant.description}</p>
-                    <p className='product-price'>{plant.cost}</p>
-                    <button  onClick={() => handleAddToCart(plant)}>Add to Cart</button>
-                </div>
-            );
-        });
-    });
-    return plantElements;
-    }
+   
     return (
         <div>
              <div className="navbar" style={styleObj}>
